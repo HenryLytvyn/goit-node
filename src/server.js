@@ -1,11 +1,8 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { getEnvVar } from './utils/getEnvVar.js';
 import { getAllStudents, getStudentById } from './services/students.js';
-
-dotenv.config();
 
 const PORT = Number(getEnvVar('PORT', '3000'));
 
@@ -39,7 +36,7 @@ export const startServer = () => {
     });
   });
 
-  app.get('/students/:studentId', async (req, res, next) => {
+  app.get('/students/:studentId', async (req, res) => {
     const { studentId } = req.params;
     const student = await getStudentById(studentId);
 
