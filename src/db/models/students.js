@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import GENDERS from '../../constants/genders.js';
 
 const studentsScheme = new Schema(
   {
@@ -13,7 +14,7 @@ const studentsScheme = new Schema(
     gender: {
       type: String,
       required: true,
-      enum: ['male', 'female', 'other'],
+      enum: Object.values(GENDERS),
     },
     avgMark: {
       type: Number,
