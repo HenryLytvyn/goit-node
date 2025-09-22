@@ -54,11 +54,13 @@ import {
   updateStudentController,
   upsertStudentController,
 } from '../controllers/students.js';
+
 import { validateBody } from '../middlewares/validateBody.js';
 import {
   createStudentValSchema,
   updateStudentValSchema,
 } from '../validation/students.js';
+
 import isValidId from '../middlewares/isValidId.js';
 
 const studentsRouter = Router();
@@ -83,7 +85,7 @@ studentsRouter
   )
   .put(
     '/students/:studentId',
-    validateBody(updateStudentValSchema),
+    validateBody(createStudentValSchema),
     upsertStudentController,
   );
 

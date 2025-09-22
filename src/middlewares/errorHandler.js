@@ -19,7 +19,17 @@ export default function errorHandler(err, req, res, next) {
       status: err.status,
       message: err.name,
       // data: err,
-      errors: err.errors.map((err) => ({
+      errors: err.message,
+    });
+    return;
+  }
+
+  if (err.isJoi) {
+    res.status(400).json({
+      status: err.status,
+      message: 'Bad request',
+      // data: err,
+      errors: err.details.map((err) => ({
         path: err.path,
         message: err.message,
       })),

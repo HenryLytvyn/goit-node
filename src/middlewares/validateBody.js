@@ -1,19 +1,18 @@
-import createHttpError from 'http-errors';
-import { createStudentValSchema } from '../validation/students.js';
+// import createHttpError from 'http-errors';
 
 export function validateBody(schema) {
   return async function validateBodyMiddleware(req, res, next) {
-    try {
-      await schema.validateAsync(createStudentValSchema, { abortEarly: false });
-      next();
-    } catch (err) {
-      const error = createHttpError(400, 'Bad request', {
-        errors: err.details,
-      });
-      next(error);
-    }
+    // try {
+    //   await schema.validateAsync(req.body, { abortEarly: false });
+    //   next();
+    // } catch (err) {
+    //   const error = createHttpError(400, 'Bad request', {
+    //     errors: err.details,
+    //   });
+    //   next(error);
+    // }
 
-    // await schema.validateAsync(createStudentValSchema, { abortEarly: false });
-    // next();
+    await schema.validateAsync(req.body, { abortEarly: false });
+    next();
   };
 }
