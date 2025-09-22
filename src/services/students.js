@@ -18,11 +18,17 @@ export async function createStudent(payload) {
 }
 
 export async function deleteStudent(studentId) {
-  // await StudentsCollection.findOneAndDelete({
-  //   _id: studentId,
-  // });
+  const student = await StudentsCollection.findById(studentId);
+  let isStudentDelete;
+
+  if (!student) {
+    isStudentDelete = false;
+    return isStudentDelete;
+  }
 
   await StudentsCollection.findByIdAndDelete(studentId);
+  isStudentDelete = true;
+  return isStudentDelete;
 }
 
 export async function updateStudent(studentId, payload) {

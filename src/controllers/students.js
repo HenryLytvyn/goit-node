@@ -43,16 +43,13 @@ export async function createStudentController(req, res) {
   });
 }
 
-export async function deleteStudentController(req, res) {
+export async function deleteStudentController(req, res, next) {
   const { studentId } = req.params;
+  const isStudentDelete = await deleteStudent(studentId);
 
-  // const student =
-  await deleteStudent(studentId);
-
-  // if (!student) {
-  //   createHttpError(404, 'Student not found!');
-  //   return;
-  // }
+  if (!isStudentDelete) {
+    return next(createHttpError(404, 'Student not found!'));
+  }
 
   res.status(204).send();
 }
