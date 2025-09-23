@@ -1,8 +1,26 @@
 import { StudentsCollection } from '../db/models/students.js';
+import calcPaginData from '../utils/calcPaginData.js';
 
-export async function getAllStudents() {
-  const students = await StudentsCollection.find();
-  return students;
+export async function getAllStudents({ page, perPage }) {
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
+
+  const studentsQuery = StudentsCollection.find();
+  const studentsCount = await StudentsCollection.find()
+    .merge(studentsQuery)
+    .countDocuments();
+
+  const students = await studentsQuery.skip(skip).limit(limit).exec();
+
+  const paginationData = calcPaginData(studentsCount, page, perPage);
+
+  return {
+    data: students,
+    ...paginationData,
+  };
+
+  // const students = await StudentsCollection.find();
+  // return students;
 }
 
 export async function getStudentById(studentId) {

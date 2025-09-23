@@ -7,9 +7,11 @@ import {
   updateStudent,
   upsertStudent,
 } from '../services/students.js';
+import parsePaginationParams from '../utils/parsPaginationParams.js';
 
 export async function getStudentsController(req, res) {
-  const students = await getAllStudents();
+  const { page, perPage } = parsePaginationParams(req.params);
+  const students = await getAllStudents({ page, perPage });
 
   res.status(200).json({
     status: 200,
@@ -23,7 +25,7 @@ export async function getStudentByIdController(req, res, next) {
   const student = await getStudentById(studentId);
 
   if (!student) {
-    throw createHttpError(404, "Student hasn't found");
+    next(createHttpError(404, "Student hasn't found"));
   }
 
   res.status(200).json({
