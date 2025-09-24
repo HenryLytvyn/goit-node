@@ -1,16 +1,44 @@
 import { StudentsCollection } from '../db/models/students.js';
 import calcPaginData from '../utils/calcPaginData.js';
 
-export async function getAllStudents({ page, perPage }) {
+export async function getAllStudents({
+  page,
+  perPage,
+  sortBy,
+  sortOrder,
+  filter,
+}) {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
   const studentsQuery = StudentsCollection.find();
+
+  if (filter.gender) {
+    studentsQuery.where('gender').equals(filter.gender);
+  }
+  if (filter.maxAge) {
+    studentsQuery.where('age').lte(filter.maxAge);
+  }
+  if (filter.minAge) {
+    studentsQuery.where('age').gte(filter.minAge);
+  }
+  if (filter.maxAvgMark) {
+    studentsQuery.where('avgMark').lte(filter.maxAvgMark);
+  }
+
+  if (filter.minAvgMark) {
+    studentsQuery.where('avgMark').gte(filter.minAvgMark);
+  }
+
   const studentsCount = await StudentsCollection.find()
     .merge(studentsQuery)
     .countDocuments();
 
-  const students = await studentsQuery.skip(skip).limit(limit).exec();
+  const students = await studentsQuery
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder })
+    .exec();
 
   const paginationData = calcPaginData(studentsCount, page, perPage);
 
@@ -18,9 +46,6 @@ export async function getAllStudents({ page, perPage }) {
     data: students,
     ...paginationData,
   };
-
-  // const students = await StudentsCollection.find();
-  // return students;
 }
 
 export async function getStudentById(studentId) {

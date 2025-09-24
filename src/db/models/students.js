@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import GENDERS from '../../constants/genders.js';
+import { GENDERS } from '../../constants/constants.js';
 
 const studentsScheme = new Schema(
   {

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import GENDERS from '../constants/genders.js';
+import { GENDERS } from '../constants/constants.js';
 
 export const createStudentValSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
