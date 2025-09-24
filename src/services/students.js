@@ -14,7 +14,7 @@ export async function getAllStudents({
   const studentsQuery = StudentsCollection.find();
 
   if (filter.gender) {
-    studentsQuery.where('gender').equals(filter.gender);
+    studentsQuery.where('gender').eq(filter.gender);
   }
   if (filter.maxAge) {
     studentsQuery.where('age').lte(filter.maxAge);
