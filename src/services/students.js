@@ -25,7 +25,6 @@ export async function getAllStudents({
   if (filter.maxAvgMark) {
     studentsQuery.where('avgMark').lte(filter.maxAvgMark);
   }
-
   if (filter.minAvgMark) {
     studentsQuery.where('avgMark').gte(filter.minAvgMark);
   }
