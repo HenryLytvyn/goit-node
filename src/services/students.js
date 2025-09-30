@@ -29,15 +29,24 @@ export async function getAllStudents({
     studentsQuery.where('avgMark').gte(filter.minAvgMark);
   }
 
-  const studentsCount = await StudentsCollection.find()
-    .merge(studentsQuery)
-    .countDocuments();
+  // const studentsCount = await StudentsCollection.find()
+  //   .merge(studentsQuery)
+  //   .countDocuments();
 
-  const students = await studentsQuery
-    .skip(skip)
-    .limit(limit)
-    .sort({ [sortBy]: sortOrder })
-    .exec();
+  // const students = await studentsQuery
+  //   .skip(skip)
+  //   .limit(limit)
+  //   .sort({ [sortBy]: sortOrder })
+  //   .exec();
+
+  const [studentsCount, students] = await Promise.all([
+    StudentsCollection.find().merge(studentsQuery).countDocuments(),
+    studentsQuery
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder })
+      .exec(),
+  ]);
 
   const paginationData = calcPaginData(studentsCount, page, perPage);
 
