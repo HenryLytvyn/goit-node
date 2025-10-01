@@ -32,13 +32,13 @@ export async function loginUser(payload) {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
 
-  const session = {
+  const session = await SessionsCollection.create({
     userId: user._id,
     accessToken,
     refreshToken,
     accessTokenExpires: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenExpires: new Date(Date.now() + ONE_DAY),
-  };
+  });
 
   return session;
 }
