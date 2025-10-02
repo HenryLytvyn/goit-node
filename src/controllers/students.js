@@ -36,7 +36,7 @@ export async function getStudentByIdController(req, res, next) {
   const student = await getStudentById(studentId);
 
   if (!student) {
-    next(createHttpError(404, "Student hasn't found"));
+    return next(createHttpError(404, 'Student not found'));
   }
 
   res.status(200).json({
@@ -72,8 +72,7 @@ export async function updateStudentController(req, res, next) {
   const result = updateStudent(studentId, req.body);
 
   if (!result) {
-    createHttpError(404, 'Student not found!');
-    return;
+    return next(createHttpError(404, 'Student not found!'));
   }
 
   res.status(200).json({
@@ -83,7 +82,7 @@ export async function updateStudentController(req, res, next) {
   });
 }
 
-export async function upsertStudentController(req, res, next) {
+export async function upsertStudentController(req, res) {
   const { studentId } = req.params;
 
   const result = upsertStudent(studentId, req.body, { upsert: true });

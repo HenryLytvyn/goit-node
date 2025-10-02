@@ -1,4 +1,4 @@
-export default function notFoundHandler(req, res, next) {
+export default function notFoundHandler(req, res) {
   res.status(404).json({
     message: 'Not found',
   });

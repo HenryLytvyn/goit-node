@@ -6,6 +6,7 @@ export default function isValidId(req, res, next) {
 
   if (!isValidObjectId(studentId)) {
     next(createHttpError(400, 'Bad request'));
+    return;
   }
 
   next();

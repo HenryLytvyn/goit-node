@@ -44,19 +44,27 @@ export async function loginUser(payload) {
 }
 
 export async function logoutUser(sessionId) {
-  await SessionsCollection.findByIdAndDelete(sessionId);
+  await deleteSession(sessionId);
 }
 
-export function createSession() {
+function createSession(userId) {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
 
   return {
+    userId,
     accessToken,
     refreshToken,
     accessTokenExpires: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenExpires: new Date(Date.now() + ONE_DAY),
   };
+}
+
+export async function deleteSession(sessionId) {
+  const isSessionExist = await SessionsCollection.findById(sessionId);
+  if (!isSessionExist) throw createHttpError(401, 'Session does not exist!');
+
+  await SessionsCollection.findByIdAndDelete(sessionId);
 }
 
 export async function refreshUsersSession({ sessionId, refreshToken }) {
@@ -70,15 +78,23 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenExpires);
 
-  if (isSessionTokenExpired)
-    throw createHttpError(401, 'Session token expired');
+  if (isSessionTokenExpired) {
+    await deleteSession(sessionId); // just in case
+    throw createHttpError(401, 'Session token expired!');
+  }
 
-  const newSession = createSession();
+  const user = UsersCollection.findById(session.userId);
+
+  if (!user) {
+    await deleteSession(sessionId); // just in case
+    throw createHttpError(401, 'User not found!');
+  }
 
   await SessionsCollection.findOneAndDelete({ _id: sessionId, refreshToken });
 
-  return SessionsCollection.create({
-    userId: session.userId,
-    ...newSession,
-  });
+  const newSession = SessionsCollection.create(createSession(user._id));
+
+  return newSession;
+
+  // return SessionsCollection.create(newSession);
 }
