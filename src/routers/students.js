@@ -15,10 +15,12 @@ import {
 } from '../validation/students.js';
 
 import isValidId from '../middlewares/isValidId.js';
+import authenticate from '../middlewares/authenticate.js';
 
 const studentsRouter = Router();
 
 studentsRouter
+  .use('/students', authenticate)
   .get('/students', getStudentsController)
   .post(
     '/students',
@@ -26,9 +28,8 @@ studentsRouter
     createStudentController,
   );
 
-studentsRouter.use('/students/:studentId', isValidId);
-
 studentsRouter
+  .use('/students/:studentId', isValidId)
   .get('/students/:studentId', getStudentByIdController)
   .delete('/students/:studentId', deleteStudentController)
   .patch(
