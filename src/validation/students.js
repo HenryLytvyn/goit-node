@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { GENDERS } from '../constants/constants.js';
+import { isValidObjectId } from 'mongoose';
 
 export const createStudentValSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -15,6 +16,12 @@ export const createStudentValSchema = Joi.object({
     .required(),
   avgMark: Joi.number().min(2).max(12).required(),
   onDuty: Joi.boolean(),
+  parentId: Joi.string().custom((value, helper) => {
+    if (value && !isValidObjectId(value)) {
+      return helper.message('Parent id should be a valid mongoose id');
+    }
+    return true;
+  }),
 });
 
 export const updateStudentValSchema = Joi.object({
