@@ -3,12 +3,14 @@ import { validateBody } from '../middlewares/validateBody.js';
 import {
   loginUserValidationSchema,
   registerUserValidationSchema,
+  requestResetEmailSchema,
 } from '../validation/auth.js';
 import {
   loginUserController,
   logoutUserController,
   refreshUsersSessionController,
   registerUserController,
+  requestResetEmailController,
 } from '../controllers/auth.js';
 
 const authRouter = Router();
@@ -28,5 +30,11 @@ authRouter.post(
 authRouter.post('/auth/logout', logoutUserController);
 
 authRouter.post('/auth/refresh', refreshUsersSessionController);
+
+authRouter.post(
+  '/auth/request-reset-email',
+  validateBody(requestResetEmailSchema),
+  requestResetEmailController,
+);
 
 export default authRouter;

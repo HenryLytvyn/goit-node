@@ -4,6 +4,7 @@ import {
   logoutUser,
   refreshUsersSession,
   registerUser,
+  requestResetToken,
 } from '../services/auth.js';
 
 export async function setupSession(res, session) {
@@ -30,16 +31,6 @@ export async function registerUserController(req, res) {
 
 export async function loginUserController(req, res) {
   const session = await loginUser(req.body);
-
-  // res.cookie('refreshToken', session.refreshToken, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + ONE_DAY),
-  // });
-
-  // res.cookie('sessionId', session._id, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + ONE_DAY),
-  // });
 
   setupSession(res, session);
 
@@ -75,5 +66,15 @@ export async function refreshUsersSessionController(req, res) {
     data: {
       accessToken: session.accessToken,
     },
+  });
+}
+
+export async function requestResetEmailController(req, res) {
+  await requestResetToken(req.body.email);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Reset password link was successfully sent!',
+    data: {},
   });
 }
