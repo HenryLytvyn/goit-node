@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const GENDERS = {
   MALE: 'male',
   FEMALE: 'female',
@@ -26,3 +28,5 @@ export const SMTP = {
 };
 
 export const JWT_SECRET = 'JWT_SECRET';
+
+export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');

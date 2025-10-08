@@ -5,6 +5,7 @@ import {
   refreshUsersSession,
   registerUser,
   requestResetToken,
+  resetPassword,
 } from '../services/auth.js';
 
 export async function setupSession(res, session) {
@@ -75,6 +76,16 @@ export async function requestResetEmailController(req, res) {
   res.status(200).json({
     status: 200,
     message: 'Reset password link was successfully sent!',
+    data: {},
+  });
+}
+
+export async function resetPasswordController(req, res) {
+  await resetPassword(req.body);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Password was successfully updated!',
     data: {},
   });
 }
