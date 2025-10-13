@@ -96,7 +96,7 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
     throw createHttpError(401, 'Session token expired!');
   }
 
-  const user = UsersCollection.findById(session.userId);
+  const user = await UsersCollection.findById(session.userId);
 
   if (!user) {
     await deleteSession(sessionId); // just in case
@@ -105,7 +105,7 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
 
   await SessionsCollection.findOneAndDelete({ _id: sessionId, refreshToken });
 
-  const newSession = SessionsCollection.create(createSession(user._id));
+  const newSession = await SessionsCollection.create(createSession(user._id));
 
   return newSession;
 }

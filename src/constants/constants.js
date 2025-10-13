@@ -1,5 +1,6 @@
 import path from 'node:path';
-import getEnvVar, { getEnvBool } from '../utils/getEnvVar.js';
+import getEnvVar from '../utils/getEnvVar.js';
+import getEnvBool from '../utils/getEnvBool.js';
 
 export const APP_DOMAIN = getEnvVar('APP_DOMAIN');
 export const APP_PORT = getEnvVar('PORT');
