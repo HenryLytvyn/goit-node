@@ -11,6 +11,8 @@ import parsePaginationParams from '../utils/parsePaginationParams.js';
 import parseSortParams from '../utils/parseSortParams.js';
 import parseFilterParams from '../utils/parseFilterParams.js';
 import saveFileToUploadDir from '../utils/saveFileToUploadDir.js';
+import getEnvVar from '../utils/getEnvVar.js';
+import saveFileToCloudinary from '../utils/saveFileToCloudinary.js';
 
 export async function getStudentsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -74,6 +76,9 @@ export async function updateStudentController(req, res, next) {
 
   let photoUrl;
   if (photo) {
+    if (getEnvVar('ENABLE_CLOUDINARY') === true) {
+      photoUrl = await saveFileToCloudinary(photo);
+    }
     photoUrl = await saveFileToUploadDir(photo);
   }
 
@@ -89,7 +94,7 @@ export async function updateStudentController(req, res, next) {
   res.status(200).json({
     status: 200,
     message: 'Student data successfully updated!',
-    data: result.student,
+    data: result,
   });
 }
 
@@ -97,11 +102,6 @@ export async function upsertStudentController(req, res) {
   const { studentId } = req.params;
 
   const result = upsertStudent(studentId, req.body, { upsert: true });
-
-  // if (!result) {
-  //   next(createHttpError(404, 'Student not found!'));
-  //   return;
-  // }
 
   const status = result.isNew ? 201 : 200;
 

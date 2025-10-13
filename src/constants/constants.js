@@ -1,5 +1,5 @@
 import path from 'node:path';
-import getEnvVar from '../utils/getEnvVar.js';
+import getEnvVar, { getEnvBool } from '../utils/getEnvVar.js';
 
 export const APP_DOMAIN = getEnvVar('APP_DOMAIN');
 export const APP_PORT = getEnvVar('PORT');
@@ -18,6 +18,12 @@ export const SMTP = {
 };
 
 export const JWT_SECRET = getEnvVar('JWT_SECRET');
+
+export const CLOUDINARY = {
+  CLOUD_NAME: getEnvVar('CLOUD_NAME'),
+  API_KEY: getEnvVar('API_KEY'),
+  API_SECRET: getEnvVar('API_SECRET'),
+};
 
 export const GENDERS = {
   MALE: 'male',
@@ -41,3 +47,5 @@ export const ROLES = {
 export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
 export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
+
+export const ENABLE_CLOUDINARY = getEnvBool('ENABLE_CLOUDINARY');
