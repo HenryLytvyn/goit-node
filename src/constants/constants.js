@@ -1,4 +1,23 @@
 import path from 'node:path';
+import getEnvVar from '../utils/getEnvVar.js';
+
+export const APP_DOMAIN = getEnvVar('APP_DOMAIN');
+export const APP_PORT = getEnvVar('PORT');
+
+export const MONGODB_USER = getEnvVar('MONGODB_USER');
+export const MONGODB_PASSWORD = getEnvVar('MONGODB_PASSWORD');
+export const MONGODB_URL = getEnvVar('MONGODB_URL');
+export const MONGODB_DB = getEnvVar('MONGODB_DB');
+
+export const SMTP = {
+  SMTP_HOST: getEnvVar('SMTP_HOST'),
+  SMTP_PORT: getEnvVar('SMTP_PORT'),
+  SMTP_USER: getEnvVar('SMTP_USER'),
+  SMTP_PASSWORD: getEnvVar('SMTP_PASSWORD'),
+  SMTP_FROM: getEnvVar('SMTP_FROM'),
+};
+
+export const JWT_SECRET = getEnvVar('JWT_SECRET');
 
 export const GENDERS = {
   MALE: 'male',
@@ -19,14 +38,6 @@ export const ROLES = {
   PARENT: 'parent',
 };
 
-export const SMTP = {
-  SMTP_HOST: 'SMTP_HOST',
-  SMTP_PORT: 'SMTP_PORT',
-  SMTP_USER: 'SMTP_USER',
-  SMTP_PASSWORD: 'SMTP_PASSWORD',
-  SMTP_FROM: 'SMTP_FROM',
-};
-
-export const JWT_SECRET = 'JWT_SECRET';
-
 export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
+export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
+export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');

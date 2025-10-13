@@ -1,13 +1,13 @@
 import express, { json } from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-import getEnvVar from './utils/getEnvVar.js';
 import errorHandler from './middlewares/errorHandler.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import router from './routers/routers.js';
 import cookieParser from 'cookie-parser';
+import { APP_PORT, UPLOAD_DIR } from './constants/constants.js';
 
-const PORT = Number(getEnvVar('PORT', '3000'));
+const PORT = Number(APP_PORT, '3000');
 
 export function startServer() {
   const app = express();
@@ -38,6 +38,8 @@ export function startServer() {
   });
 
   app.use(router);
+
+  app.use('/uploads', express.static(UPLOAD_DIR));
 
   app.use(notFoundHandler);
 

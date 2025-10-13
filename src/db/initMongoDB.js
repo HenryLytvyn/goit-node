@@ -1,12 +1,17 @@
 import mongoose from 'mongoose';
-import getEnvVar from '../utils/getEnvVar.js';
+import {
+  MONGODB_DB,
+  MONGODB_PASSWORD,
+  MONGODB_URL,
+  MONGODB_USER,
+} from '../constants/constants.js';
 
 export async function initMongoDB() {
   try {
-    const user = getEnvVar('MONGODB_USER');
-    const pwd = getEnvVar('MONGODB_PASSWORD');
-    const url = getEnvVar('MONGODB_URL');
-    const db = getEnvVar('MONGODB_DB');
+    const user = MONGODB_USER;
+    const pwd = MONGODB_PASSWORD;
+    const url = MONGODB_URL;
+    const db = MONGODB_DB;
 
     await mongoose.connect(
       `mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority`,

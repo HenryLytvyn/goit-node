@@ -9,13 +9,13 @@ import { randomBytes } from 'crypto';
 import UsersCollection from '../db/models/user.js';
 import SessionsCollection from '../db/models/session.js';
 import {
+  APP_DOMAIN,
   FIFTEEN_MINUTES,
   JWT_SECRET,
   ONE_DAY,
   SMTP,
   TEMPLATES_DIR,
 } from '../constants/constants.js';
-import getEnvVar from '../utils/getEnvVar.js';
 import sendEmail from '../utils/sendEmail.js';
 
 export async function registerUser(payload) {
@@ -121,7 +121,7 @@ export async function requestResetToken(email) {
       sub: user._id,
       email,
     },
-    getEnvVar(JWT_SECRET),
+    JWT_SECRET,
     { expiresIn: '15m' },
   );
 
@@ -135,11 +135,11 @@ export async function requestResetToken(email) {
   const template = Handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${getEnvVar('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+    link: `${APP_DOMAIN}/reset-password?token=${resetToken}`,
   });
 
   await sendEmail({
-    from: getEnvVar(SMTP.SMTP_FROM),
+    from: SMTP.SMTP_FROM,
     to: email,
     subject: 'Reset your password',
     html,
@@ -150,7 +150,7 @@ export async function resetPassword(payload) {
   let entries;
 
   try {
-    entries = jwt.verify(payload.token, getEnvVar(JWT_SECRET));
+    entries = jwt.verify(payload.token, JWT_SECRET);
   } catch (err) {
     if (err instanceof Error) throw createHttpError(401, err.message);
     throw err;
