@@ -28,9 +28,6 @@ export default function checkRoles(...roles) {
         parentId: user._id,
       });
 
-      //   console.log('studentId: ', studentId);
-      //   console.log('parentId: ', user._id);
-
       if (student) return next();
     }
 
