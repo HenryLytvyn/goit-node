@@ -17,6 +17,10 @@ import {
   TEMPLATES_DIR,
 } from '../constants/constants.js';
 import sendEmail from '../utils/sendEmail.js';
+import {
+  getFullNameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOAuth2.js';
 
 export async function registerUser(payload) {
   const isUserExist = await UsersCollection.findOne({ email: payload.email });
@@ -96,7 +100,7 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
     throw createHttpError(401, 'Session token expired!');
   }
 
-  const user = UsersCollection.findById(session.userId);
+  const user = await UsersCollection.findById(session.userId);
 
   if (!user) {
     await deleteSession(sessionId); // just in case
@@ -105,7 +109,7 @@ export async function refreshUsersSession({ sessionId, refreshToken }) {
 
   await SessionsCollection.findOneAndDelete({ _id: sessionId, refreshToken });
 
-  const newSession = SessionsCollection.create(createSession(user._id));
+  const newSession = await SessionsCollection.create(createSession(user._id));
 
   return newSession;
 }
@@ -169,4 +173,24 @@ export async function resetPassword(payload) {
     { _id: user._id },
     { password: encryptedPassword },
   );
+}
+
+export async function loginOrSignUpWithGoogle(code) {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  if (!payload) createHttpError(401, 'Unathorized');
+
+  let user = await UsersCollection.findOne({ email: payload.email });
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    user = await UsersCollection.create({
+      name: getFullNameFromGoogleTokenPayload(payload),
+      email: payload.email,
+      role: 'parent',
+      password,
+    });
+  }
+
+  const newSession = createSession(user._id);
+  return await SessionsCollection.create(newSession);
 }

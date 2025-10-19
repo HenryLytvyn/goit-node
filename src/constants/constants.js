@@ -1,6 +1,8 @@
 import path from 'node:path';
-import getEnvVar, { getEnvBool } from '../utils/getEnvVar.js';
+import getEnvVar from '../utils/getEnvVar.js';
+import getEnvBool from '../utils/getEnvBool.js';
 
+// environment variables
 export const APP_DOMAIN = getEnvVar('APP_DOMAIN');
 export const APP_PORT = getEnvVar('PORT');
 
@@ -25,6 +27,18 @@ export const CLOUDINARY = {
   API_SECRET: getEnvVar('API_SECRET'),
 };
 
+export const ENABLE_CLOUDINARY = getEnvBool('ENABLE_CLOUDINARY');
+
+export const GOOGLE_AUTH_CLIENT_ID = getEnvVar('GOOGLE_AUTH_CLIENT_ID');
+export const GOOGLE_AUTH_CLIENT_SECRET = getEnvVar('GOOGLE_AUTH_CLIENT_SECRET');
+
+// paths
+export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
+export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
+export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
+
+// other variables
 export const GENDERS = {
   MALE: 'male',
   FEMALE: 'female',
@@ -43,9 +57,3 @@ export const ROLES = {
   TEACHER: 'teacher',
   PARENT: 'parent',
 };
-
-export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
-export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
-export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
-
-export const ENABLE_CLOUDINARY = getEnvBool('ENABLE_CLOUDINARY');
