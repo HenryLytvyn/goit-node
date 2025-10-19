@@ -76,7 +76,7 @@ export async function updateStudentController(req, res, next) {
 
   let photoUrl;
   if (photo) {
-    if (ENABLE_CLOUDINARY === true) {
+    if (ENABLE_CLOUDINARY) {
       photoUrl = await saveFileToCloudinary(photo);
     } else {
       photoUrl = await saveFileToUploadDir(photo);

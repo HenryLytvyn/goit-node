@@ -24,11 +24,6 @@ export default async function authenticate(req, res, next) {
 
   const isAccessTokenExpired = new Date() > session.accessTokenExpires;
 
-  //   console.log(new Date(session.accessTokenExpires));
-  //   console.log(session.accessTokenExpires);
-  //   console.log(new Date());
-  //   console.log(Date.now());
-
   if (isAccessTokenExpired) {
     return next(createHttpError(401, 'Access token expired!'));
   }
